@@ -95,14 +95,4 @@ class WebcamCapture {
   }
 }
 
-
-
-// Set up our event listener to run the startup process
-// once loading is complete.
-window.addEventListener('load', function(){
-  window.webcam = new WebcamCapture()
-  window.webcam.startup()
-}, false);
-
-
-
+module.exports = WebcamCapture

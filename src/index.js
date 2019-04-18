@@ -1,11 +1,8 @@
-// console.log("before")
-// // WebcamCapture = require('./capture.js')
-// require('./capture.js')
-// console.log("after")
-
-// // import { WebcamCapture } from "./capture.js";
-
-// console.log("webcam", WebcamCapture)
+WebcamCapture = require('./capture.js')
 
 
 
+window.addEventListener('load', function(){
+  webcam = new WebcamCapture()
+  webcam.startup()
+}, false);
