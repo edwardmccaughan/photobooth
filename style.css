@@ -1,0 +1,10 @@
+
+/*#photo, #video, #canvas {
+  height: 640px;
+  width: 480px;
+  border: 1px solid red;
+}*/
+
+ #canvas {
+  display: none;
+}
