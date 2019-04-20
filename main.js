@@ -13,7 +13,7 @@ function createWindow () {
 
   ipcMain.on('print_photo', function (event) {
     console.log('print event received')
-    printer.print_to_pdf()
+    // printer.print_to_pdf()
   })
 }
 

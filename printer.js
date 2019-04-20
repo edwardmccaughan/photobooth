@@ -16,10 +16,6 @@ class Printer {
   }
 
   print_to_pdf() {
-    console.log('printing!', this.pdfSettings())
-    return
-
-
     this.browserWindow.webContents.printToPDF(this.pdfSettings(), function(err, data) {
       
       if (err) {

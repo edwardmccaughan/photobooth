@@ -13,27 +13,27 @@ class WebcamCapture {
     this.video = null;
     this.canvas = null;
     this.photo = null;
+    this.printing_photo = null;
     this.startbutton = null; 
-
-    window.addEventListener("keydown", this.keydown_handler.bind(this) , false)
   }
 
   startup() {
     this.video = document.getElementById('video');
     this.canvas = document.getElementById('canvas');
     this.photo = document.getElementById('photo');
+    this.printing_photo = document.getElementById('printing_photo');
     this.startbutton = document.getElementById('startbutton');
 
     navigator.mediaDevices.getUserMedia({video: true, audio: false})
-    .then(function(stream) {
-      this.video.srcObject = stream;
-      this.video.play();
-    }.bind(this))
-    .catch(function(err) {
-      console.log("An error occurred: " + err);
-    });
+      .then((stream) => {
+        this.video.srcObject = stream;
+        this.video.play();
+      })
+      .catch(function(err) {
+        console.log("An error occurred: " + err);
+      });
 
-    video.addEventListener('canplay', function(ev){
+    video.addEventListener('canplay', (ev) => {
       if (!this.streaming) {
         this.height = this.video.videoHeight / (this.video.videoWidth/ this.width);     
         this.video.setAttribute('width', this.width);
@@ -42,23 +42,7 @@ class WebcamCapture {
         this.canvas.setAttribute('height', this.height);
         this.streaming = true;
       }
-    }.bind(this), false);
-
-    startbutton.addEventListener('click', function(ev){
-      this.takepicture();
-      ev.preventDefault();
-    }.bind(this), false);
-    
-    this.clearphoto();
-  }
-
-  clearphoto() {
-    var context = canvas.getContext('2d');
-    context.fillStyle = "#AAA";
-    context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-    var data = canvas.toDataURL('image/png');
-    this.photo.setAttribute('src', data);
+    }, false);
   }
 
   // Capture a photo by fetching the current contents of the video
@@ -75,6 +59,7 @@ class WebcamCapture {
     
       var data = canvas.toDataURL('image/png');
       photo.setAttribute('src', data);
+      printing_photo.setAttribute('src', data);
     } else {
       this.clearphoto();
     }
@@ -82,17 +67,7 @@ class WebcamCapture {
 
   print_photo() {
     ipcRenderer.send('print_photo')
-  }
-
-  keydown_handler(event) {
-    console.log('key pressed', event.code)
-    if(event.code == "KeyQ") {
-      this.takepicture()
-    } else if(event.code == "KeyW") {
-      console.log('trying to print')
-      this.print_photo()
-    }
-  }
+  }  
 }
 
 module.exports = WebcamCapture

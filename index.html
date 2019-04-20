@@ -10,15 +10,28 @@
     </script>
   </head>
   <body>
-    <div class="camera">
-      <video id="video">Video stream not available.</video>
-      <button id="startbutton">Take photo</button>
+    <div id="waiting_for_photo">
+      <div class="camera">
+        <video id="video">Video stream not available.</video>
+      </div>
+
+      <div>press q/green to take photo</div>
     </div>
 
-    <canvas id="canvas">
-    </canvas>
-    <div class="output">
-      <img id="photo" alt="The screen capture will appear in this box.">
+    <div id="photo_taken">
+      <canvas id="canvas">
+      </canvas>
+      <div class="output">
+        <img id="photo" alt="The screen capture will appear in this box.">
+      </div>
+      <div>press q/green to take another photo, or w/blue to print</div>
+    </div>
+
+    <div id="printing">
+      <div class="output">
+        <img id="printing_photo" alt="The screen capture will appear in this box.">
+      </div>
+      <div>please wait</div>
     </div>
   </body>
 </html>
