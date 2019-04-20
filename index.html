@@ -10,7 +10,9 @@
     </script>
   </head>
   <body>
-    <div id="waiting_for_photo">
+    <div id="countdown"></div>
+
+    <div class="panel" id="take_photo">
       <div class="camera">
         <video id="video">Video stream not available.</video>
       </div>
@@ -18,7 +20,7 @@
       <div>press q/green to take photo</div>
     </div>
 
-    <div id="photo_taken">
+    <div class="panel"  id="print_preview">
       <canvas id="canvas">
       </canvas>
       <div class="output">
@@ -27,11 +29,11 @@
       <div>press q/green to take another photo, or w/blue to print</div>
     </div>
 
-    <div id="printing">
+    <div class="panel"  id="printing">
       <div class="output">
         <img id="printing_photo" alt="The screen capture will appear in this box.">
       </div>
-      <div>please wait</div>
+      <div>please wait until the printer has finished. if it doesn't work, maybe add more paper, or pray to your favourite deity</div>
     </div>
   </body>
 </html>

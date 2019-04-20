@@ -1,10 +1,10 @@
-
-/*#photo, #video, #canvas {
-  height: 640px;
-  width: 480px;
-  border: 1px solid red;
-}*/
-
- #canvas {
+#canvas {
   display: none;
 }
+
+#countdown{ display: none; }
+#countdown.active{ display: block; }
+
+.panel{ display: none; }
+/*.panel.active { border: 1px solid red; }*/
+.panel.active { display: block; }
