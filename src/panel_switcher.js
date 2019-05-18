@@ -1,9 +1,8 @@
-display_countdown = require('./display_countdown.js')
+const display_countdown = require('./display_countdown.js')
 
 class PanelSwitcher {
-  constuctor() {
+  constructor() {
     var keydown_hander;
-    var state;
   }
 
   display_panel(panel) {
@@ -14,16 +13,15 @@ class PanelSwitcher {
     document.getElementById(panel).classList.add('active')
   }
 
-
   take_picture_with_countdown() {
-    display_countdown(3, () => {
-      window.webcam.takepicture() 
+    const countdown_time = 1; // TODO: this should be stored somewhere useful
+    display_countdown(countdown_time, () => {
+      window.webcam.take_picture() // TODO: don't use window...
       this.switch_to_print_preview()
     })
   }
 
   switch_to_take_photo() {
-    // window.state = 'take_photo'
     this.display_panel('take_photo')
 
     this.keydown_hander = (event) => {
@@ -34,17 +32,17 @@ class PanelSwitcher {
   }
 
   switch_to_print_preview() {
-    // window.state = 'print_preview'
     this.display_panel('print_preview')
 
     this.keydown_hander = (event) => {
        if(event.code == "KeyQ") {
         this.switch_to_take_photo()
-      } else if(event.code == "KeyW") {
+      } else if(event.code === "KeyW") {
         console.log('trying to print')
         this.switch_to_printing()
-        window.webcam.print_photo()
-        display_countdown(3, () => {
+        window.print_photo()  // TODO: don't use window...
+        const countdown_time = 3; // TODO: this should be stored somewhere useful
+        display_countdown(countdown_time, () => {
           this.switch_to_take_photo()
         })
       }
@@ -52,7 +50,6 @@ class PanelSwitcher {
   }
 
   switch_to_printing() {
-    // window.state = 'printing'
     this.display_panel('printing')
     this.keydown_hander = () => {} // do nothing
   }

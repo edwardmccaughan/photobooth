@@ -1,4 +1,6 @@
-#canvas {
+body { margin: 0px; }
+
+#webcam_canvas {
   display: none;
 }
 
@@ -6,5 +8,21 @@
 #countdown.active{ display: block; }
 
 .panel{ display: none; }
-/*.panel.active { border: 1px solid red; }*/
-.panel.active { display: block; }
+.panel.active {
+  display: block;
+  width: 100%;
+}
+
+
+
+@media print {
+   div, #countdown.active{ display: none }
+   div.output{
+    display: block
+  }
+  div.output img{
+    /* currently 2mm smaller than necessary to fit on the page, this can probably be fixed */
+    max-width: 146mm;
+    max-height: 98mm;
+  }
+}
