@@ -17,7 +17,41 @@ class WebcamCapture {
   }
 
   start_webcam() {
-    navigator.mediaDevices.getUserMedia({video: true, audio: false})
+    navigator.mediaDevices.enumerateDevices().then((devices) => {
+      const webcam_id = this.select_best_webcam(devices)
+      this.initialise_video_element(webcam_id)
+    })
+
+    video.addEventListener('canplay', this.configure_display_elements, false);
+  }
+
+  select_best_webcam(mediaDevices) {
+    return this.webcam_id(mediaDevices, 'FULL HD 1080P Webcam') ||
+             this.webcam_id(mediaDevices,'Integrated Camera')
+  }
+
+  webcam_id(mediaDevices, label) {
+    return mediaDevices
+      .filter(device => device.kind === 'videoinput')
+      .find(device => device.label.includes('FULL HD 1080P Webcam') )
+      .deviceId
+  }
+
+  webcam_options(webcam_id) {
+    return {
+        video: {
+          mandatory: {
+            chromeMediaSourceId: webcam_id,
+          }
+        },
+        audio: false
+      }
+  }
+
+  initialise_video_element(webcam_id) {
+    const options = this.webcam_options(webcam_id)
+    console.log(webcam_id, options)
+    navigator.mediaDevices.getUserMedia(options)
       .then((stream) => {
         this.video.srcObject = stream;
         this.video.play();
@@ -25,18 +59,20 @@ class WebcamCapture {
       .catch(function(err) {
         console.log("An error occurred: " + err);
       });
-
-    video.addEventListener('canplay', (ev) => {
-      if (!this.streaming) {
-        this.height = this.video.videoHeight / (this.video.videoWidth/ this.width);     
-        this.video.setAttribute('width', this.width);
-        this.video.setAttribute('height', this.height);
-        this.canvas.setAttribute('width', this.width);
-        this.canvas.setAttribute('height', this.height);
-        this.streaming = true;
-      }
-    }, false);
   }
+
+  configure_display_elements(event) {
+    if (!this.streaming) {
+      console.log('starting streaming')
+      this.height = this.video.videoHeight / (this.video.videoWidth/ this.width);     
+      this.video.setAttribute('width', this.width);
+      this.video.setAttribute('height', this.height);
+      this.canvas.setAttribute('width', this.width);
+      this.canvas.setAttribute('height', this.height);
+      this.streaming = true;
+    }
+  }
+
 
   // Capture a photo by fetching the current contents of the video
   // and drawing it into a canvas, then converting that to a PNG
