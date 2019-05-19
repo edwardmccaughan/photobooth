@@ -1,17 +1,10 @@
 class WebcamCapture {
   constructor() {
-    // The width and height of the captured photo. We will set the
-    // width to the value defined here, but the height will be
-    // calculated based on the aspect ratio of the input stream.
-    this.width = 640;    // We will scale the photo width to this
-    this.height = 0;     // This will be computed based on the input stream
+    this.width = document.documentElement.clientWidth;    // We will scale the photo width to this
+    // this.height = 0;     // This will be computed based on the input stream
 
     this.streaming = false;
-
     this.video = document.getElementById('video');
-    this.canvas = document.getElementById('webcam_canvas');
-    this.photo = document.getElementById('photo');
-    this.printing_photo = document.getElementById('printing_photo');
 
     this.start_webcam()
   }
@@ -22,12 +15,12 @@ class WebcamCapture {
       this.initialise_video_element(webcam_id)
     })
 
-    video.addEventListener('canplay', this.configure_display_elements, false);
+    video.addEventListener('canplay', this.configure_video_element.bind(this), false);
   }
 
   select_best_webcam(mediaDevices) {
-    return this.webcam_id(mediaDevices, 'FULL HD 1080P Webcam') ||
-             this.webcam_id(mediaDevices,'Integrated Camera')
+    // in theory, if this camera isn't found, getUserMedia will ignore it and fallback to whatever the default is
+    return this.webcam_id(mediaDevices, 'FULL HD 1080P Webcam')
   }
 
   webcam_id(mediaDevices, label) {
@@ -40,9 +33,9 @@ class WebcamCapture {
   webcam_options(webcam_id) {
     return {
         video: {
-          mandatory: {
-            chromeMediaSourceId: webcam_id,
-          }
+          width: 1920, // TODO: maybe get this from capabilities.width.max
+          height: 1080,
+          chromeMediaSourceId: webcam_id
         },
         audio: false
       }
@@ -55,43 +48,41 @@ class WebcamCapture {
       .then((stream) => {
         this.video.srcObject = stream;
         this.video.play();
+
+        const mediaStreamTrack = stream.getVideoTracks()[0];
+        this.imageCapture = new ImageCapture(mediaStreamTrack);
+
+        window.media = stream
+
       })
       .catch(function(err) {
         console.log("An error occurred: " + err);
       });
   }
 
-  configure_display_elements(event) {
+  configure_video_element(event) {
+    console.log('configure_video_element')
     if (!this.streaming) {
-      console.log('starting streaming')
+      //scale video from actual resolution to desired:
+      console.log('raw video:', this.video.videoWidth)
       this.height = this.video.videoHeight / (this.video.videoWidth/ this.width);     
       this.video.setAttribute('width', this.width);
-      this.video.setAttribute('height', this.height);
-      this.canvas.setAttribute('width', this.width);
-      this.canvas.setAttribute('height', this.height);
+      // this.video.setAttribute('height', this.height);
       this.streaming = true;
     }
   }
 
+  take_picture(){
+    this.imageCapture.takePhoto({ imageWidth: 1920, imageHeight: 1080 })
+    .then(this.send_photo_to_preview_elements.bind(this))
+    .catch(error => console.error('takePhoto() error:', error));
+  }
 
-  // Capture a photo by fetching the current contents of the video
-  // and drawing it into a canvas, then converting that to a PNG
-  // format data URL. By drawing it on an offscreen canvas and then
-  // drawing that to the screen, we can change its size and/or apply
-  // other changes before drawing it.
-  take_picture() {
-    var context = this.canvas.getContext('2d');
-    if (this.width && this.height) {
-      this.canvas.width = this.width;
-      this.canvas.height = this.height;
-      context.drawImage(this.video, 0, 0, this.width, this.height);
-    
-      var data = this.canvas.toDataURL('image/png');
-      photo.setAttribute('src', data);
-      printing_photo.setAttribute('src', data);
-    } else {
-      this.clearphoto();
-    }
+  send_photo_to_preview_elements(blob) {
+    document.querySelectorAll(".photo_preview").forEach(element => {
+      element.src = URL.createObjectURL(blob);
+      element.onload = () => { URL.revokeObjectURL(this.src); }
+    })
   }
 }
 

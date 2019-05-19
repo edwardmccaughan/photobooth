@@ -13,14 +13,32 @@ body { margin: 0px; }
   width: 100%;
 }
 
+img {
+  /*height: 100vh; */
+  width: 100vw;
+}
 
+#countdown {
+  position: absolute;
+  left: 50vw;
+  top: 40vh;
+  color: white;
+  font-size: 10em;
+}
 
+.caption {
+  position: absolute;
+  bottom: 0px;
+  height: 100px;
+  width: 100%;
+  background-color:rgba(255, 255, 255, 0.5);
+}
+
+#printing { display: none; }
 @media print {
-   div, #countdown.active{ display: none }
-   div.output{
-    display: block
-  }
-  div.output img{
+  #printing { display: block; }
+  #app { display: none; }
+  #printing img{
     /* currently 2mm smaller than necessary to fit on the page, this can probably be fixed */
     max-width: 146mm;
     max-height: 98mm;

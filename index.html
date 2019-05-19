@@ -10,29 +10,33 @@
     </script>
   </head>
   <body>
-    <div id="countdown"></div>
-    <canvas id="webcam_canvas"></canvas>
-
-    <div class="panel" id="take_photo">
-      <div class="camera">
-        <video id="video">Video stream not available.</video>
-      </div>
-
-      <div>press q/green to take photo</div>
+    <div id="printing">
+      <img id="printing_photo" class="photo_preview">
     </div>
 
-    <div class="panel"  id="print_preview">
-      <div class="output">
-        <img id="photo" alt="The screen capture will appear in this box.">
-      </div>
-      <div>press q/green to take another photo, or w/blue to print</div>
-    </div>
+    <div id="app">
 
-    <div class="panel"  id="printing">
-      <div class="output">
-        <img id="printing_photo" alt="The screen capture will appear in this box.">
+
+      <div id="countdown"></div>
+      <div class="panel" id="take_photo">
+        <div class="camera">
+          <video id="video">Video stream not available.</video>
+        </div>
+        <div class="caption">press q/green to take photo</div>
       </div>
-      <div>please wait until the printer has finished. if it doesn't work, maybe add more paper, or pray to your favourite deity</div>
-    </div>
+
+      <div class="panel" id="print_preview">
+        <div class="output">
+          <img class="photo_preview">
+        </div>
+        <div class="caption">press q/green to take another photo, or w/blue to print</div>
+      </div>
+
+      <div class="panel" id="printing_progress">
+        <div class="output">
+          <img id="print_preview"  class="photo_preview">
+        </div>
+        <div class="caption">please wait until the printer has finished. if it doesn't work, maybe add more paper, or pray to your favourite deity</div>
+      </div>
   </body>
 </html>

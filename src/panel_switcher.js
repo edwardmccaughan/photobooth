@@ -8,13 +8,13 @@ class PanelSwitcher {
   display_panel(panel) {
     document.getElementById('take_photo').classList.remove('active')
     document.getElementById('print_preview').classList.remove('active')
-    document.getElementById('printing').classList.remove('active')
+    document.getElementById('printing_progress').classList.remove('active')
 
     document.getElementById(panel).classList.add('active')
   }
 
   take_picture_with_countdown() {
-    const countdown_time = 1; // TODO: this should be stored somewhere useful
+    const countdown_time = 3; // TODO: this should be stored somewhere useful
     display_countdown(countdown_time, () => {
       window.webcam.take_picture() // TODO: don't use window...
       this.switch_to_print_preview()
@@ -50,7 +50,7 @@ class PanelSwitcher {
   }
 
   switch_to_printing() {
-    this.display_panel('printing')
+    this.display_panel('printing_progress')
     this.keydown_hander = () => {} // do nothing
   }
 }
