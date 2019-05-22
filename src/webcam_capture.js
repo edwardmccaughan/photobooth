@@ -11,6 +11,7 @@ class WebcamCapture {
 
   start_webcam() {
     navigator.mediaDevices.enumerateDevices().then((devices) => {
+      console.log('connected webcams:', devices.filter(device => device.kind === 'videoinput'))
       const webcam_id = this.select_best_webcam(devices)
       this.initialise_video_element(webcam_id)
     })
@@ -20,14 +21,15 @@ class WebcamCapture {
 
   select_best_webcam(mediaDevices) {
     // in theory, if this camera isn't found, getUserMedia will ignore it and fallback to whatever the default is
-    return this.webcam_id(mediaDevices, 'FULL HD 1080P Webcam')
+    return this.webcam_id(mediaDevices, 'HD Pro Webcam C920')
   }
 
   webcam_id(mediaDevices, label) {
-    return mediaDevices
+    const device = mediaDevices
       .filter(device => device.kind === 'videoinput')
-      .find(device => device.label.includes('FULL HD 1080P Webcam') )
-      .deviceId
+      .find(device => device.label.includes(label) )
+
+    return typeof device === 'undefined' ? null : device.deviceId // TODO: is there a more elegant way to do this?
   }
 
   webcam_options(webcam_id) {
@@ -43,7 +45,6 @@ class WebcamCapture {
 
   initialise_video_element(webcam_id) {
     const options = this.webcam_options(webcam_id)
-    console.log(webcam_id, options)
     navigator.mediaDevices.getUserMedia(options)
       .then((stream) => {
         this.video.srcObject = stream;
@@ -61,10 +62,8 @@ class WebcamCapture {
   }
 
   configure_video_element(event) {
-    console.log('configure_video_element')
     if (!this.streaming) {
       //scale video from actual resolution to desired:
-      console.log('raw video:', this.video.videoWidth)
       this.height = this.video.videoHeight / (this.video.videoWidth/ this.width);     
       this.video.setAttribute('width', this.width);
       // this.video.setAttribute('height', this.height);
@@ -75,7 +74,7 @@ class WebcamCapture {
   take_picture(){
     this.imageCapture.takePhoto({ imageWidth: 1920, imageHeight: 1080 })
     .then(this.send_photo_to_preview_elements.bind(this))
-    .catch(error => console.error('takePhoto() error:', error));
+    .catch(error => console.error('take_picture() error:', error));
   }
 
   send_photo_to_preview_elements(blob) {
