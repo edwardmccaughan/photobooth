@@ -21,9 +21,18 @@ body { margin: 0px; }
   position: relative;
 }
 
-img {
-  /*height: 100vh; */
-  width: 100vw;
+.imagecropper {
+  /*max-width: 100vw;
+  max-height: 100vh;*/
+  height: 763px;
+  overflow: hidden;
+}
+
+
+.imagecropper img {
+  /*width: 118%;
+  margin-left: -9%;*/
+  height: 100%;
 }
 
 #countdown {
@@ -47,11 +56,20 @@ img {
 
 #printing { display: none; }
 @media print {
-  #printing { display: block; }
-  #app { display: none; }
-  #printing img{
-    /* currently 2mm smaller than necessary to fit on the page, this can probably be fixed */
+  #printing { 
+    display: block;
     max-width: 146mm;
     max-height: 98mm;
+  }
+  #app { display: none; }
+
+  .imagecropper {
+    max-width: 100vw;
+    max-height: 100vh;
+  }
+
+  .imagecropper img {
+    width: 118%;
+    margin-left: -9%;
   }
 }

@@ -5,7 +5,7 @@ class Printer {
   constructor(browserWindow) {
     this.browserWindow = browserWindow
 
-    this.cleanup_pdf = true
+    this.enable_pdf_cleanup = true
   }
 
   pdfSettings() {
@@ -53,8 +53,8 @@ class Printer {
     })
   }
 
-  cleanup_pdf() {
-    if(this.cleanup_pdf) {
+  cleanup_pdf() { //TODO: this currently doesn't work, it's not being called for some reason
+    if(this.enable_pdf_cleanup) {
       const filePath = './generated_pdf.pdf'
       console.log('deleting pdf')
       fs.unlink(filePath, (error) => {console.log(error)})

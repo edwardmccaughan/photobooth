@@ -1,19 +1,24 @@
 const { app, BrowserWindow, ipcMain} = require('electron')
-const exec = require("child_process").exec
-const fs = require('fs');
 const Printer = require('./printer.js')
 
 function createWindow () {
-  let win = new BrowserWindow({ width: 800, height: 600 })
+  let mainWindow = new BrowserWindow({
+    width: 1366,
+    height: 768,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
 
-  win.loadFile('index.html')
-  // win.setFullScreen(true)
+  mainWindow.loadFile('index.html')
+  // mainWindow.webContents.openDevTools()
+  mainWindow.setFullScreen(true)
 
-  let printer = new Printer(win)
+  let printer = new Printer(mainWindow)
 
   ipcMain.on('print_photo', function (event) {
     console.log('print event received')
-    // printer.print_to_pdf()
+    printer.print()
   })
 }
 

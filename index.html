@@ -11,7 +11,9 @@
   </head>
   <body>
     <div id="printing">
-      <img id="printing_photo" class="photo_preview">
+      <div class="imagecropper">
+        <img id="printing_photo" class="photo_preview">
+      </div>
     </div>
 
     <div id="app">
@@ -24,14 +26,18 @@
 
       <div class="panel" id="print_preview">
         <div class="output">
-          <img class="photo_preview">
+          <div class="imagecropper">
+            <img class="photo_preview">
+        </div>
         </div>
         <div class="caption">press q/green to take another photo, or w/blue to print</div>
       </div>
 
       <div class="panel" id="printing_progress">
         <div class="output">
-          <img id="print_preview"  class="photo_preview">
+          <div class="imagecropper">
+            <img id="print_preview"  class="photo_preview">
+        </div>
         </div>
         <div class="caption">please wait until the printer has finished. if it doesn't work, maybe add more paper, or pray to your favourite deity</div>
       </div>

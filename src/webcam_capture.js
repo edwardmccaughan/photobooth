@@ -1,7 +1,7 @@
 class WebcamCapture {
   constructor() {
-    this.width = document.documentElement.clientWidth;    // We will scale the photo width to this
-    // this.height = 0;     // This will be computed based on the input stream
+    // this.width = document.documentElement.clientWidth;    // We will scale the photo width to this
+    this.height = document.documentElement.clientHeight;     // This will be computed based on the input stream
 
     this.streaming = false;
     this.video = document.getElementById('video');
@@ -29,14 +29,16 @@ class WebcamCapture {
       .filter(device => device.kind === 'videoinput')
       .find(device => device.label.includes(label) )
 
-    return typeof device === 'undefined' ? null : device.deviceId // TODO: is there a more elegant way to do this?
+    return (device || {}).deviceId
   }
 
   webcam_options(webcam_id) {
     return {
         video: {
-          width: 1920, // TODO: maybe get this from capabilities.width.max
-          height: 1080,
+          // width: 1650, // TODO: maybe get this from capabilities.width.max
+          // height: 1080,
+          width: document.documentElement.clientWidth, // TODO: maybe get this from capabilities.width.max
+          height: document.documentElement.clientHeight - 10,
           chromeMediaSourceId: webcam_id
         },
         audio: false
@@ -53,6 +55,10 @@ class WebcamCapture {
         const mediaStreamTrack = stream.getVideoTracks()[0];
         this.imageCapture = new ImageCapture(mediaStreamTrack);
 
+         this.imageCapture.getPhotoCapabilities().then(capabilities => {
+            window.capabilities = capabilities
+        })
+
         window.media = stream
 
       })
@@ -65,16 +71,16 @@ class WebcamCapture {
     if (!this.streaming) {
       //scale video from actual resolution to desired:
       this.height = this.video.videoHeight / (this.video.videoWidth/ this.width);     
-      this.video.setAttribute('width', this.width);
+      // this.video.setAttribute('width', this.width);
       // this.video.setAttribute('height', this.height);
       this.streaming = true;
     }
   }
 
   take_picture(){
-    this.imageCapture.takePhoto({ imageWidth: 1920, imageHeight: 1080 })
-    .then(this.send_photo_to_preview_elements.bind(this))
-    .catch(error => console.error('take_picture() error:', error));
+    this.imageCapture.takePhoto()
+      .then(this.send_photo_to_preview_elements.bind(this))
+      .catch(error => console.error('take_picture() error:', error));
   }
 
   send_photo_to_preview_elements(blob) {
