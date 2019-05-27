@@ -29,6 +29,7 @@ class PanelSwitcher {
     this.keydown_hander = (event) => {
       if(event.code == "KeyQ") {
         this.take_picture_with_countdown()
+        this.keydown_hander = () => {} // ignore inputs while counting down
       }
     }
   }
